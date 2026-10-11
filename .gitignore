@@ -1,0 +1,44 @@
+# ОС
+.DS_Store
+Thumbs.db
+
+text.md
+
+# Тестовые данные
+test.txt
+test.enc
+test.dec
+*.bin
+
+# Visual Studio / IDE
+.vs/
+.idea/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.ideap
+*.resharper
+
+# Результаты сборки (.NET)
+bin/
+obj/
+TestResults/
+*.Publish.xml
+
+# Локальные настройки и кэш
+*.local
+*.csproj.user
+*.dotCover
+
+# NuGet
+packages/
+*.nupkg
+.nuget/
+
+# Профилировщики и логи
+*.log
+*.psess
+*.vsp
+*.vspx
