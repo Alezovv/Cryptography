@@ -24,8 +24,8 @@ namespace CryptoLab.Common
     {
         public enum BitIndexing
         {
-            MsbFirst, // Big-endian bit indexing (DES style: bit 1 is most significant)
-            LsbFirst  // Little-endian bit indexing
+            MsbFirst, // Big-endian bit
+            LsbFirst  // Little-endian
         }
 
         public static byte[] Permute(byte[] input, int[] pBox, BitIndexing indexing, int startIndex)

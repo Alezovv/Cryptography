@@ -58,7 +58,6 @@ namespace CryptoLab.Common
                         byte[] block = new byte[blockSize];
                         Array.Copy(paddedData, i * blockSize, block, 0, blockSize);
                         
-                        // XOR with prev
                         for (int j = 0; j < blockSize; j++) block[j] ^= prevBlock[j];
                         
                         byte[] encrypted = _algorithm.EncryptBlock(block);
@@ -81,14 +80,13 @@ namespace CryptoLab.Common
                     Parallel.For(0, blockCount, i =>
                     {
                         byte[] counterBlock = (byte[])_iv.Clone();
-                        // Add i to counter (simplified)
+                        
                         counterBlock[blockSize - 1] = (byte)(counterBlock[blockSize - 1] + i);
                         byte[] keystream = _algorithm.EncryptBlock(counterBlock);
                         for (int j = 0; j < blockSize; j++)
                             result[i * blockSize + j] = (byte)(paddedData[i * blockSize + j] ^ keystream[j]);
                     });
                 }
-                // Add other modes as needed...
                 else 
                 {
                      throw new NotImplementedException($"Mode {_mode} not fully implemented in this demo.");
@@ -127,7 +125,6 @@ namespace CryptoLab.Common
                         byte[] currentCipherBlock = (byte[])block.Clone();
                         byte[] decrypted = _algorithm.DecryptBlock(block);
                         
-                        // XOR with prev
                         for (int j = 0; j < blockSize; j++) decrypted[j] ^= prevBlock[j];
                         
                         Array.Copy(decrypted, 0, decryptedPadded, i * blockSize, blockSize);
@@ -136,7 +133,6 @@ namespace CryptoLab.Common
                 }
                 else if (_mode == CipherMode.OFB)
                 {
-                    // OFB encryption and decryption are identical
                     byte[] streamBlock = (byte[])_iv.Clone();
                     for (int i = 0; i < blockCount; i++)
                     {
@@ -147,7 +143,6 @@ namespace CryptoLab.Common
                 }
                 else if (_mode == CipherMode.CTR)
                 {
-                    // CTR encryption and decryption are identical
                     Parallel.For(0, blockCount, i =>
                     {
                         byte[] counterBlock = (byte[])_iv.Clone();

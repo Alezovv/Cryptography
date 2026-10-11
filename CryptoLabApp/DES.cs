@@ -32,17 +32,13 @@ namespace CryptoLab.Algorithms
 
         public byte[] Apply(byte[] right, byte[] roundKey)
         {
-            // 1. Expansion E (32 -> 48 bits)
             byte[] expanded = BitUtils.Permute(right, E, BitUtils.BitIndexing.MsbFirst, 1);
 
-            // 2. XOR with round key
             for (int i = 0; i < expanded.Length; i++) expanded[i] ^= roundKey[i];
 
-            // 3. Substitution S-boxes (48 -> 32 bits)
             byte[] substituted = new byte[4];
             for (int i = 0; i < 8; i++)
             {
-                // Each S-box takes 6 bits
                 int bitStart = i * 6;
                 int row = (BitUtils.GetBit(expanded, bitStart, BitUtils.BitIndexing.MsbFirst) ? 2 : 0) +
                           (BitUtils.GetBit(expanded, bitStart + 5, BitUtils.BitIndexing.MsbFirst) ? 1 : 0);
@@ -52,7 +48,6 @@ namespace CryptoLab.Algorithms
                           (BitUtils.GetBit(expanded, bitStart + 4, BitUtils.BitIndexing.MsbFirst) ? 1 : 0);
                 
                 byte val = S[i][row, col];
-                // Put 4 bits into substituted array
                 for (int b = 0; b < 4; b++)
                 {
                     bool bitVal = (val & (8 >> b)) != 0;
@@ -60,7 +55,6 @@ namespace CryptoLab.Algorithms
                 }
             }
 
-            // 4. Permutation P
             return BitUtils.Permute(substituted, P, BitUtils.BitIndexing.MsbFirst, 1);
         }
     }
@@ -86,8 +80,6 @@ namespace CryptoLab.Algorithms
         {
             byte[] pc1Key = BitUtils.Permute(masterKey, PC1, BitUtils.BitIndexing.MsbFirst, 1);
             
-            // Split into C0, D0 (28 bits each)
-            // Representing 28 bits in bytes is tricky, we'll use bit-by-bit
             bool[] c = new bool[28];
             bool[] d = new bool[28];
             for (int i = 0; i < 28; i++)
@@ -99,15 +91,13 @@ namespace CryptoLab.Algorithms
             byte[][] roundKeys = new byte[16][];
             for (int i = 0; i < 16; i++)
             {
-                // Shift
                 for (int s = 0; s < SHIFTS[i]; s++)
                 {
                     bool c0 = c[0]; Array.Copy(c, 1, c, 0, 27); c[27] = c0;
                     bool d0 = d[0]; Array.Copy(d, 1, d, 0, 27); d[27] = d0;
                 }
-
-                // Combine and PC2
-                byte[] combined = new byte[7]; // 56 bits
+                
+                byte[] combined = new byte[7]; 
                 for (int j = 0; j < 28; j++)
                 {
                     BitUtils.SetBit(combined, j, c[j], BitUtils.BitIndexing.MsbFirst);

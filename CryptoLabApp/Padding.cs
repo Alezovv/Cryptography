@@ -10,9 +10,6 @@ namespace CryptoLab.Common
             if (mode == PaddingMode.None) return data;
 
             int paddingLength = blockSize - (data.Length % blockSize);
-            // If data is already a multiple of blockSize, some paddings (PKCS7, ISO10126, ANSIX923) 
-            // usually add a full block of padding. 
-            // Zeros usually don't if not requested, but for symmetry we'll handle it.
             
             byte[] padded = new byte[data.Length + paddingLength];
             Array.Copy(data, padded, data.Length);
@@ -20,7 +17,6 @@ namespace CryptoLab.Common
             switch (mode)
             {
                 case PaddingMode.Zeros:
-                    // Already zeros by default in C# array initialization
                     break;
                 case PaddingMode.PKCS7:
                     for (int i = data.Length; i < padded.Length; i++)
@@ -59,7 +55,7 @@ namespace CryptoLab.Common
                     break;
             }
 
-            if (paddingLength <= 0 || paddingLength > blockSize) return data; // Or throw
+            if (paddingLength <= 0 || paddingLength > blockSize) return data;
             return data.Take(data.Length - paddingLength).ToArray();
         }
     }

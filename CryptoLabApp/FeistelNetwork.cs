@@ -8,7 +8,7 @@ namespace CryptoLab.Algorithms
         private readonly IKeyExpansion _keyExpansion;
         private readonly IRoundFunction _roundFunction;
         private byte[][] _roundKeys;
-        public int BlockSize => 8; // Default for DES, but can be variable
+        public int BlockSize => 8; 
         public int KeySize { get; protected set; }
 
         public FeistelNetwork(IKeyExpansion keyExpansion, IRoundFunction roundFunction)
@@ -55,8 +55,6 @@ namespace CryptoLab.Algorithms
                 left = prevRight;
             }
 
-            // Final swap is usually undone or kept depending on specific algorithm
-            // DES has a final swap that effectively swaps them back.
             byte[] result = new byte[block.Length];
             Array.Copy(right, 0, result, 0, halfSize);
             Array.Copy(left, 0, result, halfSize, halfSize);

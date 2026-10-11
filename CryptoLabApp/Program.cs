@@ -15,11 +15,9 @@ namespace CryptoLabApp
             byte[] key = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF };
             byte[] iv = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
             
-            // 1. DES Demonstration
             Console.WriteLine("\n[DES Demonstration]");
             var des = new DESAlgorithm();
             
-            // Testing different modes and paddings
             var modes = new[] { CipherMode.CBC, CipherMode.ECB, CipherMode.CTR };
             var paddings = new[] { PaddingMode.PKCS7, PaddingMode.ISO10126, PaddingMode.Zeros };
 
@@ -39,7 +37,6 @@ namespace CryptoLabApp
                 }
             }
 
-            // 2. DEAL Demonstration
             Console.WriteLine("\n[DEAL Demonstration]");
             byte[] dealKey = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
             byte[] dealIv = new byte[16]; 
@@ -53,7 +50,6 @@ namespace CryptoLabApp
             byte[] dealDecrypted = await dealContext.DecryptAsync(dealEncrypted);
             Console.WriteLine($"DEAL Decrypted: {System.Text.Encoding.UTF8.GetString(dealDecrypted)}");
 
-            // 3. File Processing Demonstration
             Console.WriteLine("\n[File Processing Demonstration]");
             string testFile = "test.txt";
             string encryptedFile = "test.enc";
